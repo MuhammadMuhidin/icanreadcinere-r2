@@ -2,6 +2,8 @@ import { R2Explorer } from "r2-explorer";
 
 export default {
   async fetch(request, env) {
+    console.log("MY_BUCKET:", env.MY_BUCKET);
+    
     const auth = request.headers.get("Authorization");
 
     if (!auth || !auth.startsWith("Basic ")) {
