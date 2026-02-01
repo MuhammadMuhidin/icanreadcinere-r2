@@ -10,4 +10,4 @@ export default {
       }
     }).fetch(request, env);
   }
-};};
+};
