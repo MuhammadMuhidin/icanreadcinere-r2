@@ -1,11 +1,5 @@
 import { R2Explorer } from "r2-explorer";
 
-const USER_FOLDER_MAP = {
-  mita: "MITA/",
-  test: "TEST/",
-  admin: ""
-};
-
 export default {
   async fetch(request, env) {
     const auth = request.headers.get("Authorization");
@@ -22,21 +16,17 @@ export default {
     const decoded = atob(auth.replace("Basic ", ""));
     const [username, password] = decoded.split(":");
 
-    // validasi password
-    if (password !== env.BASIC_AUTH_PASS) {
+    // 🔑 ambil data user dari secret JSON
+    const users = JSON.parse(env.BASIC_AUTH_USERS);
+    const user = users[username];
+
+    if (!user || user.password !== password) {
       return new Response("Forbidden", { status: 403 });
     }
 
-    // tentukan folder
-    const prefix = USER_FOLDER_MAP[username];
-    if (prefix === undefined) {
-      return new Response("No folder access", { status: 403 });
-    }
-
-    // 🔑 inject prefix ke R2 Explorer
     const explorer = R2Explorer({
       readonly: false,
-      prefix,              // ⭐ INI KUNCI UTAMA
+      prefix: user.prefix,   // ⭐ folder ditentukan DI SINI
       disablePublicUrls: true
     });
 
