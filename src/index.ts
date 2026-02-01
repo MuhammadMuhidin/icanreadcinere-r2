@@ -2,7 +2,7 @@ import { R2Explorer } from "r2-explorer";
 
 export default {
   async fetch(request, env) {
-    console.log("MY_BUCKET:", env.MY_BUCKET);
+    console.log("bucket:", env.bucket);
     
     const auth = request.headers.get("Authorization");
 
